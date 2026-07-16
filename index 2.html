@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROSTOSERVIS — запис на сервіс</title>
+<meta name="description" content="Запис на СТО PROSTOSERVIS у Києві та Бердичеві. Залиш телефон — передзвонимо і підберемо час.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     PROSTOSERVIS — форма запису
+     Що редагувати шукай за коментарем  >>> РЕДАГУВАТИ
+     ============================================================ */
+
+  :root{
+    --graphite:#16181D;
+    --graphite-2:#1F2229;
+    --steel:#2A2E37;
+    --paper:#F4F3EE;
+    --paper-line:#DAD8CE;
+    --ink:#1A1C20;
+    --ink-muted:#5C5F66;
+    --red:#E01E2B;
+    --red-deep:#A81420;
+    --text:#E9EAEC;
+    --text-muted:#9A9DA5;
+    --ok:#3FA66A;
+    --danger:#E5533C;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--graphite);
+    color:var(--text);
+    font-family:'Manrope',system-ui,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  .wrap{max-width:560px;margin:0 auto;padding:0 20px}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:52px 0 30px;
+    text-align:left;
+  }
+  .hazard{
+    height:8px;width:100%;
+    background:repeating-linear-gradient(-45deg,var(--red) 0 16px,var(--graphite) 16px 32px);
+    opacity:.9;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:.18em;
+    color:var(--red);
+    text-transform:uppercase;
+    margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow .dot{width:6px;height:6px;background:var(--red);border-radius:50%;display:inline-block}
+  h1{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:clamp(38px,11vw,58px);
+    line-height:.98;
+    letter-spacing:.005em;
+  }
+  h1 .accent{color:var(--red)}
+  .hero p{
+    margin-top:18px;
+    font-size:17px;
+    color:var(--text-muted);
+    max-width:38ch;
+  }
+  .scroll-cue{
+    margin-top:26px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--text-muted);
+    display:flex;align-items:center;gap:8px;
+  }
+  .scroll-cue .arrow{animation:bob 1.6s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+  /* ---------- ORDER SLIP (форма) ---------- */
+  .slip-zone{padding:14px 0 56px}
+  .slip{
+    position:relative;
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:4px;
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.6);
+  }
+  /* перфорація по верхньому краю */
+  .slip::before{
+    content:"";
+    position:absolute;top:-9px;left:0;right:0;height:18px;
+    background:
+      radial-gradient(circle at 9px 9px, transparent 8px, var(--paper) 8px) 0 0/18px 18px repeat-x;
+  }
+  .slip-inner{padding:26px 22px 28px}
+
+  .slip-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:12px;margin-bottom:20px;
+    gap:12px;
+  }
+  .slip-title{
+    font-family:'Oswald',sans-serif;font-weight:600;
+    text-transform:uppercase;font-size:19px;letter-spacing:.02em;
+    line-height:1.05;
+  }
+  .slip-no{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;
+    color:var(--ink-muted);text-align:right;white-space:nowrap;
+  }
+  .slip-no b{color:var(--ink)}
+
+  .field{margin-bottom:16px}
+  .field label{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-muted);
+    margin-bottom:7px;
+  }
+  .field label .req{color:var(--danger)}
+  .field input,.field select,.field textarea{
+    width:100%;
+    font-family:'Manrope',sans-serif;font-size:16px;
+    color:var(--ink);
+    background:transparent;
+    border:none;border-bottom:1.5px solid var(--paper-line);
+    padding:8px 2px;
+    border-radius:0;
+  }
+  .field textarea{resize:none;min-height:44px}
+  .field input:focus,.field select:focus,.field textarea:focus{
+    outline:none;border-bottom-color:var(--red-deep);
+  }
+  .field select{appearance:none;-webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235C5F66' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 2px center;padding-right:22px;cursor:pointer;
+  }
+
+  /* перемикач локації */
+  .toggle{display:flex;gap:0;border:1.5px solid var(--ink);border-radius:3px;overflow:hidden}
+  .toggle input{position:absolute;opacity:0;pointer-events:none}
+  .toggle label{
+    flex:1;margin:0;text-align:center;cursor:pointer;
+    font-family:'Oswald',sans-serif;font-weight:500;font-size:15px;text-transform:uppercase;letter-spacing:.04em;
+    color:var(--ink);padding:11px 8px;transition:background .12s,color .12s;
+    letter-spacing:.05em;
+  }
+  .toggle label:first-of-type{border-right:1.5px solid var(--ink)}
+  .toggle input:checked + label{background:var(--ink);color:var(--paper)}
+  .toggle input:focus-visible + label{box-shadow:inset 0 0 0 2px var(--red-deep)}
+
+  /* кнопка */
+  .submit{
+    width:100%;margin-top:8px;
+    font-family:'Oswald',sans-serif;font-weight:700;font-size:19px;text-transform:uppercase;letter-spacing:.06em;
+    color:#fff;
+    background:var(--red);
+    border:none;border-radius:3px;
+    padding:16px;cursor:pointer;
+    transition:transform .06s ease, background .15s;
+  }
+  .submit:hover{background:var(--red-deep)}
+  .submit:active{transform:translateY(1px)}
+  .submit:disabled{opacity:.6;cursor:default}
+
+  .fine{
+    margin-top:14px;font-size:12.5px;color:var(--ink-muted);text-align:center;
+    line-height:1.4;
+  }
+
+  /* штамп «ПРИЙНЯТО» після відправки */
+  .stamp-wrap{display:none;text-align:center;padding:26px 10px 6px}
+  .stamp-wrap.on{display:block}
+  .stamp{
+    display:inline-block;
+    font-family:'Oswald',sans-serif;font-weight:700;font-size:34px;letter-spacing:.06em;
+    color:var(--red);
+    border:4px solid var(--red);border-radius:6px;
+    padding:8px 20px;transform:rotate(-7deg);
+    opacity:0;
+    animation:stampIn .5s cubic-bezier(.2,1.3,.4,1) forwards;
+  }
+  @keyframes stampIn{0%{transform:rotate(-7deg) scale(1.6);opacity:0}60%{opacity:1}100%{transform:rotate(-7deg) scale(1);opacity:1}}
+  .stamp-wrap p{margin-top:18px;color:var(--ink);font-size:16px}
+  .stamp-wrap .sub{color:var(--ink-muted);font-size:14px;margin-top:6px}
+
+  .form-error{
+    display:none;margin-top:12px;padding:10px 12px;border-radius:3px;
+    background:rgba(229,83,60,.1);border:1px solid rgba(229,83,60,.4);
+    color:#B03A28;font-size:13.5px;
+  }
+  .form-error.on{display:block}
+
+  /* ---------- НИЖНЯ СМУГА ---------- */
+  .steps{
+    padding:30px 0 40px;
+    border-top:1px solid var(--steel);
+  }
+  .steps h2{
+    font-family:'IBM Plex Mono',monospace;font-weight:500;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);
+    margin-bottom:18px;
+  }
+  .step{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px}
+  .step .n{
+    font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;
+    color:var(--red);flex:0 0 auto;
+    width:26px;height:26px;border:1.5px solid var(--red);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step .t{font-size:15px;color:var(--text)}
+  .step .t span{color:var(--text-muted)}
+
+  footer{
+    padding:22px 0 40px;border-top:1px solid var(--steel);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-muted);
+    display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;
+  }
+  footer a{color:var(--red);text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  footer .hours{letter-spacing:.04em}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+
+  <div class="hazard"></div>
+
+  <header class="hero wrap">
+    <div class="eyebrow"><span class="dot"></span> PROSTOSERVIS · СТО · КИЇВ + БЕРДИЧІВ</div>
+    <h1>Запис на<br>сервіс за <span class="accent">30 секунд</span></h1>
+    <p>Залиш номер і що треба зробити — передзвонимо й підберемо зручний час. Без реєстрацій і очікування.</p>
+    <div class="scroll-cue"><span class="arrow">↓</span> Заповни бланк нижче</div>
+  </header>
+
+  <section class="slip-zone wrap">
+    <div class="slip">
+      <div class="slip-inner">
+
+        <div class="slip-head">
+          <div class="slip-title">Наряд-<br>замовлення</div>
+          <div class="slip-no">БЛАНК<br>№ <b id="ticketNo">—</b></div>
+        </div>
+
+        <!-- ФОРМА -->
+        <div id="formBody">
+          <div class="field">
+            <label for="name">Ім'я <span class="req">*</span></label>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="Як до вас звертатися">
+          </div>
+
+          <div class="field">
+            <label for="phone">Телефон <span class="req">*</span></label>
+            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+380 __ ___ __ __">
+          </div>
+
+          <div class="field">
+            <label>Локація <span class="req">*</span></label>
+            <div class="toggle">
+              <input type="radio" id="loc-kyiv" name="location" value="Київ" checked>
+              <label for="loc-kyiv">Київ</label>
+              <input type="radio" id="loc-berd" name="location" value="Бердичів">
+              <label for="loc-berd">Бердичів</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="service">Що потрібно зробити <span class="req">*</span></label>
+            <!-- >>> РЕДАГУВАТИ: список послуг під свої -->
+            <select id="service" name="service">
+              <option value="" disabled selected>Оберіть послугу</option>
+              <option>Рихтування авто</option>
+              <option>Фарбування авто</option>
+              <option>Розбір / збір авто</option>
+              <option>Ремонт ходової</option>
+              <option>Заміна ГРМ</option>
+              <option>Шиномонтаж</option>
+              <option>Полірування кузова</option>
+              <option>Електронні роботи</option>
+              <option>Відновлення безпеки</option>
+              <option>Комплексне відновлення після ДТП</option>
+              <option>Послуги евакуатора</option>
+              <option>Комплексна діагностика</option>
+              <option>Регулярне ТО</option>
+              <option>Інше (напишу в коментарі)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="comment">Коментар <span style="color:var(--ink-muted)">— необов'язково</span></label>
+            <textarea id="comment" name="comment" placeholder="Марка авто, що турбує, зручний час…"></textarea>
+          </div>
+
+          <button class="submit" id="submitBtn" type="button">Записатися</button>
+          <div class="form-error" id="formError"></div>
+          <p class="fine">Натискаючи «Записатися», ви погоджуєтесь, що ми зателефонуємо для підтвердження.</p>
+        </div>
+
+        <!-- ШТАМП ПІСЛЯ ВІДПРАВКИ -->
+        <div class="stamp-wrap" id="stampWrap">
+          <div class="stamp">Прийнято</div>
+          <p>Заявку записано.</p>
+          <p class="sub">Майстер передзвонить найближчим часом і узгодить час.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="steps wrap">
+    <h2>Що далі</h2>
+    <div class="step"><div class="n">1</div><div class="t">Ви лишаєте заявку <span>— телефон і послуга</span></div></div>
+    <div class="step"><div class="n">2</div><div class="t">Майстер передзвонює <span>— уточнює деталі</span></div></div>
+    <div class="step"><div class="n">3</div><div class="t">Узгоджуємо час <span>— і чекаємо вас на сервісі</span></div></div>
+  </section>
+
+  <footer class="wrap">
+    <span class="hours">ПН–ПТ 9:00–18:00 · СБ 9:00–13:00 · НД вихідний</span>
+    <a href="tel:+380978144334">Подзвонити · 097 814 43 34</a>
+  </footer>
+
+<script>
+  /* ============================================================
+     >>> РЕДАГУВАТИ: сюди встав URL свого Google Apps Script
+     (з кроку «Розгорнути → Веб-застосунок»). Поки тут PASTE_URL_HERE —
+     форма працює в демо-режимі й нічого не відправляє.
+     ============================================================ */
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycby0hejYOcqBB5RPeLakxoY3KZTQkf6X1vSpZ371AzaDaPMSgLo0SChtdreFbA6D5SM3/exec";
+
+  // номер бланка (декоративний)
+  const now = new Date();
+  document.getElementById('ticketNo').textContent =
+    now.getFullYear() + '-' + String(Math.floor(1000 + Math.random()*9000));
+
+  const btn = document.getElementById('submitBtn');
+  const errBox = document.getElementById('formError');
+
+  function showError(msg){ errBox.textContent = msg; errBox.classList.add('on'); }
+  function clearError(){ errBox.classList.remove('on'); }
+
+  function validPhone(v){
+    const digits = (v.match(/\d/g) || []).length;
+    return digits >= 9; // достатньо цифр для укр. номера
+  }
+
+  btn.addEventListener('click', async function(){
+    clearError();
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const service = document.getElementById('service').value;
+    const comment = document.getElementById('comment').value.trim();
+    const location = document.querySelector('input[name="location"]:checked').value;
+
+    if(!name){ showError('Впишіть ім\'я.'); return; }
+    if(!validPhone(phone)){ showError('Впишіть коректний номер телефону.'); return; }
+    if(!service){ showError('Оберіть послугу.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Відправляємо…';
+
+    const payload = new URLSearchParams({ name, phone, location, service, comment });
+
+    try{
+      if(ENDPOINT && ENDPOINT !== "PASTE_URL_HERE"){
+        await fetch(ENDPOINT, { method:'POST', mode:'no-cors', body: payload });
+      } else {
+        // демо-режим: імітуємо відправку
+        await new Promise(r => setTimeout(r, 600));
+        console.log('DEMO — заявка не відправлена (ENDPOINT не заданий):', Object.fromEntries(payload));
+      }
+      document.getElementById('formBody').style.display = 'none';
+      document.getElementById('stampWrap').classList.add('on');
+    }catch(e){
+      btn.disabled = false;
+      btn.textContent = 'Записатися';
+      showError('Не вдалося відправити. Перевірте інтернет і спробуйте ще раз.');
+    }
+  });
+</script>
+</body>
+</html>
